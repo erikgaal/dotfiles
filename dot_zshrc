@@ -1,0 +1,18 @@
+source /opt/homebrew/share/antigen/antigen.zsh
+
+antigen use oh-my-zsh
+
+antigen bundle macos
+antigen bundle git
+antigen bundle composer
+antigen bundle laravel
+antigen bundle npm
+antigen bundle yarn
+antigen bundle command-not-found
+
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle zsh-users/zsh-syntax-highlighting
+
+antigen theme vercel/zsh-theme
+
+antigen apply

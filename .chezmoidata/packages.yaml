@@ -1,0 +1,27 @@
+packages:
+  darwin:
+    brews:
+    - 'antigen'
+    - 'chezmoi'
+    - 'dockutil'
+    - 'gh'
+    - 'git'
+    - 'httpie'
+    - 'jq'
+    - 'tldr'
+    - 'zsh'
+    casks:
+    - 'arc'
+    - 'chatgpt'
+    - 'gpg-suite'
+    - 'iterm2'
+    - 'monitorcontrol'
+    - 'notion'
+    - 'notion-calendar'
+    - 'orbstack'
+    - 'phpstorm'
+    - 'postico'
+    - 'rectangle'
+    - 'raycast'
+    - 'tuple'
+    - 'visual-studio-code'

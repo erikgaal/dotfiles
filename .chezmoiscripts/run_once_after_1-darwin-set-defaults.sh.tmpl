@@ -1,0 +1,9 @@
+#!/bin/bash
+{{ if (eq .chezmoi.os "darwin") -}}
+
+{{ range $namespace, $items := .defaults -}}
+{{ range $key, $value := $items -}}
+defaults write {{ $namespace }} {{ $key | quote }} {{ $value }}
+{{ end -}}
+{{ end -}}
+{{ end -}}

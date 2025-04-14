@@ -1,0 +1,26 @@
+defaults:
+  NSGlobalDomain:
+    AppleKeyboardUIMode: -int "2"
+    ApplePressAndHoldEnabled: -bool false
+    KeyRepeat: -int "2"
+    InitialKeyRepeat: -int "12"
+    WebKitDeveloperExtras: -bool true
+  com.apple.desktopservices:
+    DSDontWriteNetworkStores: -bool true
+    DSDontWriteUSBStores: -bool true
+  com.apple.dock:
+    tilesize: -int "36"
+    autohide: -bool true
+    show-recents: -bool false
+  com.apple.finder:
+    FXDefaultSearchScope: -string "SCcf"
+    FXEnableExtensionChangeWarning: -bool false
+    FXPreferredViewStyle: -string "Nlsv"
+  com.apple.screencapture:
+    disable-shadow: -bool true
+    location: -string "~/Pictures/Screenshots"
+  com.apple.Music:
+    userWantsPlaybackNotifications: -bool true
+  com.apple.Safari:
+    IncludeDevelopMenu: -bool true
+    ShowFullURLInSmartSearchField: -bool true
