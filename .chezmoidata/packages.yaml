@@ -13,6 +13,8 @@ packages:
     casks:
     - 'arc'
     - 'chatgpt'
+    - 'font-fira-code'
+    - 'font-ibm-plex'
     - 'gpg-suite'
     - 'iterm2'
     - 'monitorcontrol'
