@@ -11,6 +11,7 @@ packages:
     - 'tldr'
     - 'zsh'
     casks:
+    - 'nikitabobko/tap/aerospace'
     - 'arc'
     - 'chatgpt'
     - 'font-fira-code'
@@ -23,7 +24,6 @@ packages:
     - 'orbstack'
     - 'phpstorm'
     - 'postico'
-    - 'rectangle'
     - 'raycast'
     - 'tuple'
     - 'visual-studio-code'
