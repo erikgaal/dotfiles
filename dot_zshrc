@@ -4,6 +4,7 @@ antigen use oh-my-zsh
 
 antigen bundle macos
 antigen bundle git
+antigen bundle jj
 antigen bundle composer
 antigen bundle laravel
 antigen bundle npm
@@ -16,3 +17,25 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 antigen theme vercel/zsh-theme
 
 antigen apply
+
+function git_prompt() {
+  branch=$(jj_prompt_template 'self.change_id().shortest(3)' || git_prompt_info)
+
+  if [ "$branch" = '' ]; then
+    # not a git repo
+    echo ''
+  else
+    if branch_is_dirty; then
+      echo "$GIT_PROMPT_PREFIX$GIT_PROMPT_DIRTY$branch$GIT_PROMPT_SUFFIX"
+    else
+      echo "$GIT_PROMPT_PREFIX$GIT_PROMPT_CLEAN$branch$GIT_PROMPT_SUFFIX"
+    fi
+  fi
+
+}
+
+# Created by `pipx` on 2025-06-02 16:07:24
+export PATH="$PATH:/Users/erik.gaal/.local/bin"
+
+export EDITOR=vim
+

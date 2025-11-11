@@ -1,0 +1,10 @@
+"$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
+
+[user]
+name = "Erik Gaal"
+email = "erik.gaal@gosuperscript.com"
+
+[signing]
+behavior = "own"
+backend = "gpg"
+

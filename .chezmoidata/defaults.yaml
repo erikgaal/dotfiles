@@ -24,3 +24,5 @@ defaults:
   com.apple.Safari:
     IncludeDevelopMenu: -bool true
     ShowFullURLInSmartSearchField: -bool true
+  com.apple.Terminal:
+    ShellExitAction: -int "2"
