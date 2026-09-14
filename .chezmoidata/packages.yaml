@@ -1,32 +1,103 @@
+# Package groups keyed by profile. Profiles are chosen per-machine at
+# `chezmoi init` and stored in ~/.config/chezmoi/chezmoi.toml.
+# "core" is always installed; every other profile is opt-in.
 packages:
   darwin:
-    brews:
-    - 'antigen'
-    - 'bat'
-    - 'chezmoi'
-    - 'dockutil'
-    - 'gh'
-    - 'git'
-    - 'httpie'
-    - 'jq'
-    - 'jj'
-    - 'nvm'
-    - 'tldr'
-    - 'zsh'
-    casks:
-    - 'nikitabobko/tap/aerospace'
-    - 'chatgpt'
-    - 'font-fira-code'
-    - 'font-ibm-plex'
-    - 'gpg-suite'
-    - 'helium-browser'
-    - 'iterm2'
-    - 'monitorcontrol'
-    - 'notion'
-    - 'notion-calendar'
-    - 'orbstack'
-    - 'phpstorm'
-    - 'postico'
-    - 'raycast'
-    - 'tuple'
-    - 'visual-studio-code'
+    core:
+      brews:
+        - 'antidote'          # zsh plugin manager (replaces antigen, disabled by brew 2026-11-22)
+        - 'starship'          # prompt; jj via a custom module (no built-in jj support)
+        - 'mise'              # node/python version manager (replaces nvm)
+        - 'uv'                # python packaging + `uv tool` (replaces pipx)
+        - 'chezmoi'
+        - 'coreutils'
+        - 'bat'
+        - 'git-delta'         # git diff pager
+        - 'eza'
+        - 'fd'
+        - 'fzf'
+        - 'git'
+        - 'git-filter-repo'
+        - 'git-lfs'
+        - 'gh'
+        - 'hyperfine'
+        - 'jj'
+        - 'jq'
+        - 'tldr'
+        - 'tree'
+        - 'wget'
+        - 'zoxide'
+        - 'zsh'
+        - 'zsh-completions'
+      casks:
+        - '1password-cli'     # required by the chezmoi init secret lookup
+        - 'ghostty'
+        - 'font-fira-code'
+        - 'gpg-suite'         # commit signing
+    dev:
+      brews:
+        - 'composer'
+        - 'php@8.2'
+        - 'php@8.4'
+        - 'pie'
+        - 'phpantom-lsp'
+        - 'postgresql@18'
+        - 'act'
+        - 'actionlint'
+        - 'httpie'
+      casks:
+        - 'orbstack'
+        - 'tablepro'
+        - 'httpie-desktop'
+        - 'zed'
+    ai:
+      brews:
+        - 'ccusage'
+        - 'herdr'
+        - 'worktrunk'
+      casks:
+        - 'claude'
+        - 'chatgpt'
+    desktop:
+      brews:
+        - 'dockutil'
+        - 'm1ddc'             # DDC display switching, bound in .aerospace.toml
+        - 'rclone'
+        - 'syncthing'
+      casks:
+        - 'nikitabobko/tap/aerospace'
+        - 'jordanbaird-ice'
+        - 'raycast'
+        - 'aldente'
+        - 'lulu'
+        - 'choosy'
+        - 'monitorcontrol'
+        - 'obsidian'
+        - 'google-chrome'
+        - 'helium-browser'
+        - 'telegram'
+        - 'discord'
+        - 'notion'
+        - 'notion-calendar'
+        - 'font-ibm-plex'
+        - 'font-sf-pro'
+    work:
+      brews: []
+      casks:
+        - 'tuple'
+        - 'linear'
+    hobby3d:
+      brews: []
+      casks:
+        - 'blender'
+        - 'godot'
+        - 'inkscape'
+        - 'scribus'
+        - 'prusaslicer'
+    audio:
+      brews:
+        - 'switchaudio-osx'
+      casks:
+        - 'blackhole-2ch'
+        - 'blackhole-16ch'
+        - 'rekordbox'

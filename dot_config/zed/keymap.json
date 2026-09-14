@@ -1,0 +1,16 @@
+[
+  {
+    "context": "Terminal",
+    "bindings": {
+      "shift-enter": [
+        "terminal::SendText",
+        "\u001b\r"
+      ]
+    }
+  },
+  {
+    "bindings": {
+      "shift shift": "file_finder::Toggle"
+    }
+  }
+]

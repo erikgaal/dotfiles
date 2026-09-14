@@ -1,0 +1,24 @@
+"$schema" = "https://jj-vcs.github.io/jj/latest/config-schema.json"
+
+[user]
+name = {{ .name | quote }}
+email = {{ .email | quote }}
+
+[signing]
+behavior = "own"
+backend = "gpg"
+key = {{ .signingkey | quote }}
+
+[ui]
+# PhpStorm is no longer installed; jj's built-in merge editor has no external dep.
+merge-editor = ":builtin"
+diff-editor = ":builtin"
+{{ if .profiles.work }}
+# Mirrors the [includeIf] in .gitconfig.
+[[--scope]]
+--when.repositories = [{{ printf "%s/Code/superscript" .chezmoi.homeDir | quote }}]
+
+[--scope.user]
+name = {{ .workName | quote }}
+email = {{ .workEmail | quote }}
+{{- end }}

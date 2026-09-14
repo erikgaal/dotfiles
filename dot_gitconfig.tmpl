@@ -1,6 +1,7 @@
 [user]
-    name = {{ .name | quote }}
+	name = {{ .name | quote }}
 	email = {{ .email | quote }}
+	signingkey = {{ .signingkey | quote }}
 
 [commit]
 	gpgsign = true
@@ -8,3 +9,37 @@
 [pull]
 	rebase = true
 
+[init]
+	defaultBranch = main
+
+[core]
+	sshCommand = ssh -i ~/.ssh/keys/personal.pub -o IdentitiesOnly=yes
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	line-numbers = true
+
+[merge]
+	conflictStyle = zdiff3
+
+[credential "https://github.com"]
+	helper =
+	helper = !/opt/homebrew/bin/gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/opt/homebrew/bin/gh auth git-credential
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+{{ if .profiles.work }}
+[includeIf "gitdir:~/Code/superscript/"]
+	path = ~/.gitconfig-superscript
+{{- end }}

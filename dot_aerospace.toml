@@ -97,6 +97,9 @@ automatically-unhide-macos-hidden-apps = false
     # end tell'
     # '''
 
+    # Switch the external display to DisplayPort input (was a Hammerspoon hotkey).
+    ctrl-shift-equal = 'exec-and-forget /opt/homebrew/bin/m1ddc display 98BE8DFD-EDC4-41DF-BF8F-4951F39009E0 set input 15'
+
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
     alt-slash = 'layout tiles horizontal vertical'
     alt-comma = 'layout accordion horizontal vertical'

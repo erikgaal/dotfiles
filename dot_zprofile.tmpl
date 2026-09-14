@@ -1,0 +1,8 @@
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# Added by OrbStack: command-line tools and integration
+source {{ .chezmoi.homeDir }}/.orbstack/shell/init.zsh 2>/dev/null || :
+
+# PATH belongs in the login shell so it is inherited, not re-prepended per shell.
+# ~/.local/bin carries `uv tool` shims (formerly pipx).
+export PATH="{{ .chezmoi.homeDir }}/.local/bin:{{ .chezmoi.homeDir }}/.spin/bin:$PATH"

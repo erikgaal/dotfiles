@@ -1,0 +1,14 @@
+{
+  "public function": {
+    "prefix": "pubf",
+    "body": ["public function $1()", "{", "    $0", "}"]
+  },
+  "protected function": {
+    "prefix": "prof",
+    "body": ["protected function $1()", "{", "    $0", "}"]
+  },
+  "private function": {
+    "prefix": "prif",
+    "body": ["private function $1()", "{", "    $0", "}"]
+  }
+}

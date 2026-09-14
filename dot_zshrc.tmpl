@@ -1,0 +1,127 @@
+# ---------------------------------------------------------------- environment
+export EDITOR=vim
+# PATH is set in .zprofile so it is inherited rather than re-prepended per shell.
+
+# ------------------------------------------------------------------ completion
+# oh-my-zsh plugins expect ZSH_CACHE_DIR from oh-my-zsh.sh, which antidote never
+# runs. Without it the jj plugin writes its completion to /completions/_jj and
+# fails on every startup.
+export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
+[[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p "$ZSH_CACHE_DIR/completions"
+
+# Must run before plugins so completion-providing bundles register cleanly.
+if type brew &>/dev/null; then
+  FPATH="$(brew --prefix)/share/zsh-completions:$FPATH"
+fi
+fpath=("$ZSH_CACHE_DIR/completions" $fpath)
+autoload -Uz compinit && compinit
+
+# --------------------------------------------------------------------- plugins
+source /opt/homebrew/opt/antidote/share/antidote/antidote.zsh
+antidote load
+
+# ----------------------------------------------------------------------- tools
+eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
+eval "$(mise activate zsh)"
+eval "$(fzf --zsh)"
+
+command -v wt >/dev/null 2>&1 && eval "$(wt config shell init zsh)"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+[ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
+
+# --------------------------------------------------------------------- aliases
+# Claude Code against the work config directory
+alias claudew='CLAUDE_CONFIG_DIR=$HOME/.claude-work claude'
+
+# ------------------------------------------------------------------- functions
+# Create a git worktree in .claude/worktrees/<random-name>
+worktree() {
+  local root
+  root=$(git rev-parse --show-toplevel 2>/dev/null) || { echo "Not in a git repo"; return 1; }
+  local name
+  name=$(grep -E '^[a-z]{4,8}$' /usr/share/dict/words | shuf -n2 | tr '\n' '-' | sed 's/-$//')
+  local dir="$root/.claude/worktrees/$name"
+  mkdir -p "$root/.claude/worktrees"
+  if [ -n "$1" ]; then
+    git worktree add -b "$1" "$dir"
+  else
+    git worktree add "$dir"
+  fi
+  cd "$dir"
+}
+
+# Remove the current worktree and cd back to the main repo
+unworktree() {
+  local dir
+  dir=$(git rev-parse --show-toplevel 2>/dev/null) || { echo "Not in a git repo"; return 1; }
+  case "$dir" in
+    */.claude/worktrees/*)
+      local main_root
+      main_root=$(git -C "$dir" worktree list --porcelain | head -1 | sed 's/^worktree //')
+      cd "$main_root" && git worktree remove "$dir"
+      ;;
+    *) echo "Not in a .claude/worktrees/ worktree"; return 1 ;;
+  esac
+}
+{{ if .profiles.dev }}
+# Auto-switch PHP version based on composer.json.
+# mise does not read composer.json's require.php constraint, so this stays.
+_composer_php_auto_switch() {
+  local dir="$PWD"
+  local php_bin=""
+
+  # Walk up to find nearest composer.json
+  while [[ "$dir" != "/" ]]; do
+    if [[ -f "$dir/composer.json" ]]; then
+      local php_constraint
+      php_constraint=$(sed -n '/"require"\s*:/,/}/p' "$dir/composer.json" | grep '"php"' || true)
+      if [[ -n "$php_constraint" ]]; then
+        local min_version
+        min_version=$(echo "$php_constraint" | sed -E 's/.*"[~^>=<|* ]*([0-9]+\.[0-9]+).*/\1/')
+        local min_major="${min_version%%.*}"
+        local min_minor="${min_version##*.}"
+        # Find highest installed php@X.Y where X.Y >= min_version and X == min_major
+        local best=""
+        for candidate in /opt/homebrew/opt/php@*/bin; do
+          local cv="${candidate%/bin}"
+          cv="${cv##*php@}"
+          local cmaj="${cv%%.*}"
+          local cmin="${cv##*.}"
+          if (( cmaj == min_major && cmin >= min_minor )); then
+            if [[ -z "$best" ]] || [[ "$(printf '%s\n%s' "$best" "$cv" | sort -t. -k1,1n -k2,2n | tail -1)" == "$cv" ]]; then
+              best="$cv"
+            fi
+          fi
+        done
+        if [[ -n "$best" ]]; then
+          php_bin="/opt/homebrew/opt/php@$best/bin"
+        fi
+      fi
+      break
+    fi
+    dir="${dir:h}"
+  done
+
+  # Rebuild PATH: strip all php@ paths, then prepend the matched one
+  local new_path=""
+  local p
+  for p in ${(s.:.)PATH}; do
+    [[ "$p" == */php@*/bin ]] && continue
+    new_path="${new_path:+$new_path:}$p"
+  done
+
+  if [[ -n "$php_bin" ]]; then
+    export PATH="$php_bin:$new_path"
+  else
+    export PATH="$new_path"
+  fi
+}
+
+autoload -U add-zsh-hook
+add-zsh-hook chpwd _composer_php_auto_switch
+_composer_php_auto_switch
+{{ end -}}

@@ -1,0 +1,6 @@
+[user]
+	name = {{ .workName | quote }}
+	email = {{ .workEmail | quote }}
+
+[core]
+	sshCommand = ssh -i ~/.ssh/keys/mannum.pub -o IdentitiesOnly=yes

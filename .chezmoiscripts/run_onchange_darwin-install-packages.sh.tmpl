@@ -1,12 +1,19 @@
 #!/bin/bash
 {{ if (eq .chezmoi.os "darwin") -}}
+set -euo pipefail
 
+# Installs 'core' plus every profile enabled for this machine.
+# Re-runs automatically whenever the rendered package list changes.
 brew bundle --file=/dev/stdin <<EOF
-{{ range .packages.darwin.brews -}}
+{{ range $profile := prepend .enabledProfiles "core" -}}
+{{ $group := index $.packages.darwin $profile -}}
+# --- {{ $profile }} ---
+{{ range $group.brews -}}
 brew {{ . | quote }}
 {{ end -}}
-{{ range .packages.darwin.casks -}}
+{{ range $group.casks -}}
 cask {{ . | quote }}
+{{ end -}}
 {{ end -}}
 EOF
 {{ end -}}

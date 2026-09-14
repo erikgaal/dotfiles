@@ -1,0 +1,129 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__laravel-boost__search-docs",
+      "Bash(vendor/bin/phpstan analyse:*)",
+      "mcp__laravel-boost__get-config",
+      "Bash(composer test:unit:*)",
+      "Bash(nx run-many:*)",
+      "Bash(git checkout:*)",
+      "Bash(git rm:*)",
+      "Bash(composer update:*)",
+      "Bash(git reset:*)",
+      "Bash(git clean:*)",
+      "Bash(../../vendor/bin/phpunit:*)",
+      "Bash({{ .chezmoi.homeDir }}/Code/product-catalogue/vendor/bin/phpunit:*)",
+      "Bash({{ .chezmoi.homeDir }}/Code/product-catalogue/vendor/bin/phpstan analyse:*)",
+      "Bash(git add:*)",
+      "Bash(composer test:types:*)",
+      "Bash(php artisan test:*)",
+      "Bash(npx nx run-many --target test)",
+      "Bash(npx nx run-many:*)",
+      "Bash(npx nx run:*)",
+      "Bash(find:*)",
+      "Bash(composer test:*)",
+      "Bash(php vendor/bin/phpunit:*)",
+      "Bash(composer show:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl:*)",
+      "Bash(php:*)",
+      "Bash({{ .chezmoi.homeDir }}/.claude/automations/review-pr.sh:*)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "opus",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '{{ .chezmoi.homeDir }}/.claude/hooks/herdr-smart-rename.sh'",
+            "timeout": 90,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '{{ .chezmoi.homeDir }}/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "clangd-lsp@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "linear@claude-plugins-official": true,
+    "swift-lsp@claude-plugins-official": true,
+    "worktrunk@worktrunk": true,
+    "ponytail@ponytail": true,
+    "svelte@svelte": true,
+    "code-modernization@claude-plugins-official": true,
+    "codex@openai-codex": true
+  },
+  "extraKnownMarketplaces": {
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    },
+    "recall": {
+      "source": {
+        "source": "github",
+        "repo": "raiyanyahya/recall"
+      }
+    },
+    "worktrunk": {
+      "source": {
+        "source": "github",
+        "repo": "max-sixty/worktrunk"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    },
+    "svelte": {
+      "source": {
+        "source": "github",
+        "repo": "sveltejs/ai-tools"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    }
+  },
+  "effortLevel": "xhigh",
+  "modelSettings": {
+    "claude-opus-5": {
+      "effortLevel": "xhigh"
+    }
+  },
+  "tui": "fullscreen",
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
+  "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
+  "theme": "light",
+  "preferredNotifChannel": "terminal_bell",
+  "autoCompactEnabled": true,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true
+}

@@ -1,0 +1,12 @@
+# Loaded by antidote. zsh-syntax-highlighting must stay last.
+ohmyzsh/ohmyzsh path:lib
+ohmyzsh/ohmyzsh path:plugins/macos
+ohmyzsh/ohmyzsh path:plugins/git
+ohmyzsh/ohmyzsh path:plugins/jj
+ohmyzsh/ohmyzsh path:plugins/composer
+ohmyzsh/ohmyzsh path:plugins/laravel
+ohmyzsh/ohmyzsh path:plugins/npm
+ohmyzsh/ohmyzsh path:plugins/yarn
+ohmyzsh/ohmyzsh path:plugins/command-not-found
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-syntax-highlighting

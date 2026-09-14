@@ -1,3 +1,39 @@
+{{- /* Profiles: chosen once per machine, stored in ~/.config/chezmoi/chezmoi.toml */ -}}
+{{- $profiles := list -}}
+{{- if promptBoolOnce . "profiles.dev" "Enable 'dev' profile (PHP, Postgres, Zed, OrbStack)" -}}
+{{-   $profiles = append $profiles "dev" -}}
+{{- end -}}
+{{- if promptBoolOnce . "profiles.ai" "Enable 'ai' profile (Claude, herdr, worktrunk)" -}}
+{{-   $profiles = append $profiles "ai" -}}
+{{- end -}}
+{{- if promptBoolOnce . "profiles.desktop" "Enable 'desktop' profile (AeroSpace, Raycast, browsers, fonts)" -}}
+{{-   $profiles = append $profiles "desktop" -}}
+{{- end -}}
+{{- if promptBoolOnce . "profiles.work" "Enable 'work' profile (Superscript git identity, Tuple, Linear)" -}}
+{{-   $profiles = append $profiles "work" -}}
+{{- end -}}
+{{- if promptBoolOnce . "profiles.hobby3d" "Enable 'hobby3d' profile (Blender, Godot, Inkscape, PrusaSlicer)" -}}
+{{-   $profiles = append $profiles "hobby3d" -}}
+{{- end -}}
+{{- if promptBoolOnce . "profiles.audio" "Enable 'audio' profile (BlackHole, rekordbox)" -}}
+{{-   $profiles = append $profiles "audio" -}}
+{{- end -}}
+
+{{- /* Identity comes from 1Password at init time only. The resolved values land
+       in the local chezmoi.toml, which is NOT part of this repo. */ -}}
+{{- $op := "op://Private/Dotfiles" -}}
+
 [data]
-    name = {{ promptStringOnce . "name" "Name" | quote  }}
-    email = {{ promptStringOnce . "email" "Email address" | quote }}
+    name = {{ onepasswordRead (printf "%s/name" $op) "my.1password.com" | quote }}
+    email = {{ onepasswordRead (printf "%s/email" $op) "my.1password.com" | quote }}
+    signingkey = {{ onepasswordRead (printf "%s/signingkey" $op) "my.1password.com" | quote }}
+{{- if has "work" $profiles }}
+    workName = {{ onepasswordRead (printf "%s/work name" $op) "my.1password.com" | quote }}
+    workEmail = {{ onepasswordRead (printf "%s/work email" $op) "my.1password.com" | quote }}
+{{- end }}
+    enabledProfiles = {{ $profiles | toJson }}
+
+[data.profiles]
+{{- range $p := list "dev" "ai" "desktop" "work" "hobby3d" "audio" }}
+    {{ $p }} = {{ has $p $profiles }}
+{{- end }}
