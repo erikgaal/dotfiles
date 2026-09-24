@@ -19,17 +19,26 @@
 {{-   $profiles = append $profiles "audio" -}}
 {{- end -}}
 
-{{- /* Identity comes from 1Password at init time only. The resolved values land
-       in the local chezmoi.toml, which is NOT part of this repo. */ -}}
-{{- $op := "op://Private/Dotfiles" -}}
+{{- /* Identity is read once at init time, from 1Password if `op` is installed
+       and you opt in, otherwise from prompts. The resolved values land in the
+       local chezmoi.toml, which is NOT part of this repo. */ -}}
+{{- $use1p := false -}}
+{{- if lookPath "op" -}}
+{{-   $use1p = promptBoolOnce . "use1password" "Read identity from 1Password (op://Private/Dotfiles)" -}}
+{{- end -}}
+{{- $opFields := dict "name" "name" "email" "email" "signingkey" "signingkey" -}}
+{{- $prompts := dict "name" "Git name" "email" "Git email" "signingkey" "GPG signing key fingerprint (leave empty to skip signing)" -}}
+{{- if has "work" $profiles -}}
+{{-   $_ := set $opFields "workName" "work name" -}}
+{{-   $_ := set $opFields "workEmail" "work email" -}}
+{{-   $_ := set $prompts "workName" "Work git name" -}}
+{{-   $_ := set $prompts "workEmail" "Work git email" -}}
+{{- end -}}
 
 [data]
-    name = {{ onepasswordRead (printf "%s/name" $op) "my.1password.com" | quote }}
-    email = {{ onepasswordRead (printf "%s/email" $op) "my.1password.com" | quote }}
-    signingkey = {{ onepasswordRead (printf "%s/signingkey" $op) "my.1password.com" | quote }}
-{{- if has "work" $profiles }}
-    workName = {{ onepasswordRead (printf "%s/work name" $op) "my.1password.com" | quote }}
-    workEmail = {{ onepasswordRead (printf "%s/work email" $op) "my.1password.com" | quote }}
+    use1password = {{ $use1p }}
+{{- range $key, $field := $opFields }}
+    {{ $key }} = {{ if $use1p }}{{ onepasswordRead (printf "op://Private/Dotfiles/%s" $field) "my.1password.com" | quote }}{{ else }}{{ promptStringOnce $ $key (index $prompts $key) | quote }}{{ end }}
 {{- end }}
     enabledProfiles = {{ $profiles | toJson }}
 

@@ -1,10 +1,12 @@
 [user]
 	name = {{ .name | quote }}
 	email = {{ .email | quote }}
+{{- if .signingkey }}
 	signingkey = {{ .signingkey | quote }}
 
 [commit]
 	gpgsign = true
+{{- end }}
 
 [pull]
 	rebase = true

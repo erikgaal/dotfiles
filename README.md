@@ -9,11 +9,14 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply erikgaal
 ```
 
 `chezmoi init` prompts for which **profiles** this machine should have, then
-reads identity out of 1Password. Nothing secret lives in this repo.
+for your identity (name, email, GPG signing key). If the 1Password CLI is
+installed it offers to read those from 1Password instead. Nothing secret lives
+in this repo.
 
 ### Fedora / Asahi Linux
 
-`chezmoi init` reads identity from 1Password, so `op` must exist first:
+To read identity from 1Password, install and sign in to `op` first (optional;
+without it `chezmoi init` just prompts):
 
 ```sh
 sudo rpm --import https://downloads.1password.com/linux/keys/1password.asc
@@ -26,7 +29,13 @@ repo_gpgcheck=1
 gpgkey=https://downloads.1password.com/linux/keys/1password.asc
 EOF
 sudo dnf install -y 1password-cli
-eval "$(op signin --account my.1password.com)"   # after `op account add`
+op account add --address my.1password.com
+eval "$(op signin --account my.1password.com)"
+```
+
+Then:
+
+```sh
 sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply erikgaal
 ```
 
@@ -36,7 +45,7 @@ The install script also makes zsh the login shell. Mac-only apps (AeroSpace,
 Raycast, TablePro, …) are simply absent; see `packages.linux` for what each
 profile installs there.
 
-### 1Password prerequisite
+### 1Password (optional)
 
 Identity is read once, at `chezmoi init` time, from an item named `Dotfiles`
 in the `Private` vault of the `my.1password.com` account. The resolved values
@@ -55,6 +64,7 @@ op item create --category='Secure Note' --title='Dotfiles' --vault='Private' \
 ```
 
 The two `work *` fields are only read when the `work` profile is enabled.
+Leave the signing key empty when prompted to disable commit signing.
 
 ## Profiles
 
