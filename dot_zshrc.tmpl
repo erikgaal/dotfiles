@@ -24,9 +24,10 @@ source ~/.antidote/antidote.zsh
 antidote load
 
 # ----------------------------------------------------------------------- tools
+# mise first: on Linux it provides starship.
+eval "$(mise activate zsh)"
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
-eval "$(mise activate zsh)"
 eval "$(fzf --zsh)"
 
 command -v wt >/dev/null 2>&1 && eval "$(wt config shell init zsh)"
