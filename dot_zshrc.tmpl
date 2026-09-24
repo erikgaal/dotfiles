@@ -4,8 +4,7 @@ export EDITOR=vim
 
 # ------------------------------------------------------------------ completion
 # oh-my-zsh plugins expect ZSH_CACHE_DIR from oh-my-zsh.sh, which antidote never
-# runs. Without it the jj plugin writes its completion to /completions/_jj and
-# fails on every startup.
+# runs. Without it plugins like npm write their completions to /completions/.
 export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
 [[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p "$ZSH_CACHE_DIR/completions"
 
@@ -17,7 +16,11 @@ fpath=("$ZSH_CACHE_DIR/completions" $fpath)
 autoload -Uz compinit && compinit
 
 # --------------------------------------------------------------------- plugins
+{{ if eq .chezmoi.os "darwin" -}}
 source /opt/homebrew/opt/antidote/share/antidote/antidote.zsh
+{{ else -}}
+source ~/.antidote/antidote.zsh
+{{ end -}}
 antidote load
 
 # ----------------------------------------------------------------------- tools
@@ -67,7 +70,7 @@ unworktree() {
     *) echo "Not in a .claude/worktrees/ worktree"; return 1 ;;
   esac
 }
-{{ if .profiles.dev }}
+{{ if and .profiles.dev (eq .chezmoi.os "darwin") }}
 # Auto-switch PHP version based on composer.json.
 # mise does not read composer.json's require.php constraint, so this stays.
 _composer_php_auto_switch() {

@@ -2,6 +2,6 @@
 {{ if not .profiles.work }}
 .gitconfig-superscript
 {{ end }}
-{{ if not .profiles.desktop }}
+{{ if or (not .profiles.desktop) (ne .chezmoi.os "darwin") }}
 .aerospace.toml
 {{ end }}

@@ -2,7 +2,6 @@
 
 format = """
 $directory\
-$custom\
 $git_branch$git_status\
 $cmd_duration\
 $line_break\
@@ -17,20 +16,7 @@ truncation_length = 3
 truncate_to_repo = true
 style = "bold cyan"
 
-# starship has no built-in jj module (vcs covers git/hg/pijul/fossil only),
-# so this reproduces the old `jj_prompt_template || git_prompt_info` behaviour.
-[custom.jj]
-description = "current jj change"
-command = '''jj log -r@ --no-graph --ignore-working-copy -T 'separate(" ", self.change_id().shortest(4), if(self.conflict(), "×"), if(self.empty(), "∅"), if(self.description().len() == 0, "(wip)"))' 2>/dev/null'''
-# `jj root` exits non-zero outside a jj repo, and walks up to parent dirs.
-# (detect_folders only checks cwd, and is bypassed by `when = true`.)
-when = "jj root"
-symbol = "jj "
-style = "bold purple"
-format = "on [$symbol$output]($style) "
-
 [git_branch]
-# Colocated jj repos leave git on detached HEAD; that "HEAD" is pure noise.
 ignore_branches = ["HEAD"]
 style = "bold magenta"
 format = "on [$symbol$branch]($style) "

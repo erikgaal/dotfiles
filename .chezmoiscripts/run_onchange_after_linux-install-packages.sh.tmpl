@@ -1,0 +1,52 @@
+#!/bin/bash
+{{ if (eq .chezmoi.os "linux") -}}
+set -euo pipefail
+
+# Installs 'core' plus every profile enabled for this machine.
+# Re-runs automatically whenever the rendered package lists change.
+# mise config hash: {{ includeTemplate "dot_config/mise/config.toml.tmpl" . | sha256sum }}
+
+[ -f /etc/yum.repos.d/mise.repo ] ||
+  sudo dnf config-manager addrepo --from-repofile=https://mise.jdx.dev/rpm/mise.repo
+[ -f /etc/yum.repos.d/1password.repo ] || {
+  sudo rpm --import https://downloads.1password.com/linux/keys/1password.asc
+  sudo tee /etc/yum.repos.d/1password.repo >/dev/null <<'REPO'
+[1password]
+name=1Password Stable Channel
+baseurl=https://downloads.1password.com/linux/rpm/stable/$basearch
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://downloads.1password.com/linux/keys/1password.asc
+REPO
+}
+sudo dnf copr enable -y scottames/ghostty
+
+dnf=(
+{{- range $profile := prepend .enabledProfiles "core" }}
+{{- range (index $.packages.linux $profile).dnf }}
+  {{ . | quote }}
+{{- end }}
+{{- end }}
+)
+[ ${#dnf[@]} -eq 0 ] || sudo dnf install -y "${dnf[@]}"
+{{- if .profiles.dev }}
+
+sudo systemctl enable --now docker
+id -nG "$USER" | grep -qw docker || sudo usermod -aG docker "$USER"
+{{- end }}
+
+flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak=(
+{{- range $profile := prepend .enabledProfiles "core" }}
+{{- range (index $.packages.linux $profile).flatpak }}
+  {{ . | quote }}
+{{- end }}
+{{- end }}
+)
+[ ${#flatpak[@]} -eq 0 ] || flatpak install --user -y --noninteractive flathub "${flatpak[@]}"
+
+mise install
+
+[ "$(getent passwd "$USER" | cut -d: -f7)" = /usr/bin/zsh ] || sudo usermod -s /usr/bin/zsh "$USER"
+{{ end -}}

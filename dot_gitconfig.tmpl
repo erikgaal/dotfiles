@@ -28,11 +28,11 @@
 
 [credential "https://github.com"]
 	helper =
-	helper = !/opt/homebrew/bin/gh auth git-credential
+	helper = !{{ if eq .chezmoi.os "darwin" }}/opt/homebrew/bin{{ else }}/usr/bin{{ end }}/gh auth git-credential
 
 [credential "https://gist.github.com"]
 	helper =
-	helper = !/opt/homebrew/bin/gh auth git-credential
+	helper = !{{ if eq .chezmoi.os "darwin" }}/opt/homebrew/bin{{ else }}/usr/bin{{ end }}/gh auth git-credential
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f

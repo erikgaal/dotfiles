@@ -1,0 +1,9 @@
+[tools]
+node = "lts"
+{{- if eq .chezmoi.os "linux" }}
+{{- range $profile := prepend .enabledProfiles "core" }}
+{{- range (index $.packages.linux $profile).mise }}
+{{ . | quote }} = "latest"
+{{- end }}
+{{- end }}
+{{- end }}

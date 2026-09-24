@@ -6,7 +6,7 @@ packages:
     core:
       brews:
         - 'antidote'          # zsh plugin manager (replaces antigen, disabled by brew 2026-11-22)
-        - 'starship'          # prompt; jj via a custom module (no built-in jj support)
+        - 'starship'          # prompt
         - 'mise'              # node/python version manager (replaces nvm)
         - 'uv'                # python packaging + `uv tool` (replaces pipx)
         - 'chezmoi'
@@ -21,7 +21,6 @@ packages:
         - 'git-lfs'
         - 'gh'
         - 'hyperfine'
-        - 'jj'
         - 'jq'
         - 'tldr'
         - 'tree'
@@ -101,3 +100,88 @@ packages:
         - 'blackhole-2ch'
         - 'blackhole-16ch'
         - 'rekordbox'
+
+  # Fedora (Asahi Remix, aarch64). dnf = Fedora repos (+ mise, 1Password, Ghostty
+  # repos added by the install script), mise = global mise tools for anything
+  # dnf lacks, flatpak = Flathub apps. Mac-only casks have no entry here.
+  linux:
+    core:
+      dnf:
+        - 'zsh'
+        - 'mise'
+        - 'uv'
+        - 'chezmoi'
+        - 'bat'
+        - 'git-delta'
+        - 'eza'
+        - 'fd-find'
+        - 'fzf'
+        - 'git'
+        - 'git-filter-repo'
+        - 'git-lfs'
+        - 'gh'
+        - 'hyperfine'
+        - 'jq'
+        - 'tldr'
+        - 'tree'
+        - 'wget2-wget'
+        - 'zoxide'
+        - 'words'             # /usr/share/dict/words for worktree()
+        - 'flatpak'
+        - '1password-cli'
+        - 'ghostty'
+        - 'fira-code-fonts'
+      mise:
+        - 'starship'
+      flatpak: []
+    dev:
+      dnf:
+        - 'php'               # Fedora ships one PHP; no php@8.2 alongside
+        - 'composer'
+        - 'postgresql-server'
+        - 'httpie'
+        - 'moby-engine'       # Docker, in place of OrbStack
+        - 'docker-compose'
+        - 'docker-buildx'
+      mise:
+        - 'act'
+        - 'actionlint'
+        - 'github:php/pie'
+        - 'github:PHPantom-dev/phpantom_lsp'
+      flatpak:
+        - 'dev.zed.Zed'
+    ai:
+      dnf: []
+      mise:
+        - 'npm:ccusage'
+        - 'herdr'
+        - 'worktrunk'
+      flatpak: []
+    desktop:
+      dnf:
+        - 'rclone'
+        - 'syncthing'
+        - 'ibm-plex-sans-fonts'
+        - 'ibm-plex-mono-fonts'
+      mise: []
+      flatpak:
+        - 'md.obsidian.Obsidian'
+        - 'com.google.Chrome'
+        - 'org.telegram.desktop'
+    work:
+      dnf: []
+      mise: []
+      flatpak: []
+    hobby3d:
+      dnf:
+        - 'blender'
+        - 'inkscape'
+        - 'scribus'
+        - 'prusa-slicer'
+      mise: []
+      flatpak:
+        - 'org.godotengine.Godot'
+    audio:
+      dnf: []
+      mise: []
+      flatpak: []
